@@ -10,7 +10,7 @@ with open('./README.rst', 'r') as file:
 
 
 # version string
-__version__ = '0.1.0'
+__version__ = '0.1.0.post1'
 
 
 # set-up script for pip distribution
@@ -24,7 +24,7 @@ setuptools.setup(
     description='Pseudo-terminal utilities.',
     long_description=long_desc,
     long_description_content_type='text/markdown',
-    python_requires='>=3.1',
+    python_requires='>=3.3',
     install_requires=['setuptools'],
     py_modules=['ptyng'],
     package_data={
