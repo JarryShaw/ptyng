@@ -10,51 +10,42 @@ with open('./README.md', 'r') as file:
 
 
 # version string
-__version__ = '0.1.4'
+__version__ = '0.1.0'
 
 
 # set-up script for pip distribution
 setuptools.setup(
-    name = 'f2format',
-    version = __version__,
-    author = 'Jarry Shaw',
-    author_email = 'jarryshaw@icloud.com',
-    url = 'https://github.com/JarryShaw/f2format',
-    license = 'MIT License',
-    keywords = 'fstring format conversion',
-    description = 'Back-port compiler for Python 3.6 f-string literals.',
-    long_description = long_desc,
+    name='ptyng',
+    version=__version__,
+    author='Jarry Shaw',
+    author_email='jarryshaw@icloud.com',
+    url='https://github.com/JarryShaw/ptyng',
+    license='MIT License',
+    description='Pseudo-terminal utilities.',
+    long_description=long_desc,
     long_description_content_type='text/markdown',
-    python_requires = '>=3.6',
-    install_requires = ['setuptools'],
-    py_modules = ['f2format'],
-    entry_points = {
-        'console_scripts': [
-            'f2format = f2format:main',
-        ]
-    },
-    package_data = {
+    python_requires='>=3.1',
+    install_requires=['setuptools'],
+    py_modules=['ptyng'],
+    package_data={
         '': [
             'LICENSE',
             'README.md',
-            'CHANGELOG',
         ],
     },
-    classifiers = [
-        'Development Status :: 4 - Beta',
-        'Environment :: Console',
-        'Environment :: MacOS X',
-        'Environment :: Win32 (MS Windows)',
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy',
-        'Topic :: Software Development',
-        'Topic :: Utilities',
+        'Topic :: Software Development :: Libraries',
+        'Topic :: Terminals',
     ]
 )

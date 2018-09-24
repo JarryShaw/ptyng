@@ -1,8 +1,8 @@
 How to Contribute
 =================
 
-  The `f2format` project is an open source Python program focus on
-conversion between *f-string* and `str.format`.
+  The `ptyng` project is a fork of `pty` aiming to enhance performance
+of the full `stdlib` Python API.
 
 Pull Requests
 -------------
@@ -19,7 +19,7 @@ Issues
 
 1. Only bugs and feature requests are accepted here.
 2. Shall only work on important features. If the feature you're asking
-   only benefits a few people, you'd better implement the featur
+   only benefits a few people, you'd better implement the feature
    yourself and send us a pull request, or ask some of your friends to
    do so.
 3. Don't answer questions of any other types here, but tips and some
