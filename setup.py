@@ -10,7 +10,7 @@ with open('./README.rst', 'r') as file:
 
 
 # version string
-__version__ = '0.1.0.post1'
+__version__ = '0.1.0.post2'
 
 
 # set-up script for pip distribution
