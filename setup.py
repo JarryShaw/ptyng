@@ -5,7 +5,7 @@ import setuptools
 
 
 # README
-with open('./README.md', 'r') as file:
+with open('./README.rst', 'r') as file:
     long_desc = file.read()
 
 

@@ -1,2 +1,1 @@
-global-include *.py
-prune test
+exclude test.py
