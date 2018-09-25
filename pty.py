@@ -12,14 +12,6 @@ import shutil
 import subprocess
 import tty
 
-try:
-    import psutil
-    TIMEOUT = 1
-except ImportError:
-    psutil = None
-    PS_PATH = shutil.which('ps')
-    TIMEOUT = None if PS_PATH is None else 1
-
 __all__ = ["openpty","fork","spawn"]
 
 STDIN_FILENO = 0
@@ -27,6 +19,9 @@ STDOUT_FILENO = 1
 STDERR_FILENO = 2
 
 CHILD = 0
+
+PS_PATH = shutil.which('ps')
+TIMEOUT = None if PS_PATH is None else 1
 
 def openpty():
     """openpty() -> (master_fd, slave_fd)
@@ -136,27 +131,19 @@ def _read(fd):
     """Default read function."""
     return os.read(fd, 1024)
 
-if psutil is None:  # if psutil not installed
-    def _is_zombie(pid):
-        """Check if pid is in zombie stat."""
-        if PS_PATH is None:
-            return False
-        try:
-            proc = subprocess.check_output([PS_PATH, 'axo', 'pid=,stat='])
-        except subprocess.CalledProcessError:
-            return False
-        for line in proc.splitlines():
-            _pid, stat = line.strip().decode().split()
-            if int(_pid) == pid:
-                return (stat == 'Z')
-        raise OSError(3, 'No such process')
-else:
-    def _is_zombie(pid):
-        """Check if pid is in zombie stat."""
-        try:
-            return (psutil.Process(pid).status() == psutil.STATUS_ZOMBIE)
-        except psutil.NoSuchProcess:
-            raise OSError(3, 'No such process')
+def _is_zombie(pid):
+    """Check if pid is in zombie stat."""
+    if PS_PATH is None:
+        return False
+    try:
+        proc = subprocess.check_output([PS_PATH, 'axo', 'pid=,stat='])
+    except subprocess.CalledProcessError:
+        return False
+    for line in proc.splitlines():
+        _pid, stat = line.strip().decode().split()
+        if int(_pid) == pid:
+            return (stat == 'Z')
+    raise OSError(3, 'No such process')
 
 def _copy(pid, master_fd, master_read=_read, stdin_read=_read):
     """Parent copy loop.

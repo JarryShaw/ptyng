@@ -1,1 +1,2 @@
 exclude test.py
+exclude pty.py

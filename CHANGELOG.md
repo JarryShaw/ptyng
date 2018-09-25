@@ -1,5 +1,11 @@
 # Changelog
 
+### Version 0.1.1
+
+ > Release date: 2018-09-25
+
+&emsp; Introduced `psutil` for cross-platform compatibility.
+
 ### Version 0.1.0.post2
 
  > Release date: 2018-09-24
