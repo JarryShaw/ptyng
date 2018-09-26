@@ -1,7 +1,16 @@
 PTYng -- Pseudo-terminal utilities
-========
+==================================
 
-Fork of ``pty`` aiming to enhance performance of the full ``stdlib`` Python API.
+Fork of ``pty`` aiming for enhancement of the full ``stdlib`` Python API.
+
+    As encountered in practice, ``pty.spawn`` requires ``KeyboardInterrupt``
+    or else to break hanging from ``select.select`` as in ``pty._copy`` then
+    raise ``OSError`` to ``pty.spawn`` and to return from the function.
+
+    Thus, ``ptyng`` introduced ``_is_zombie`` to check if the spawned child
+    process is already dead (or, a 'zombie'), through which ``pty.spawn``
+    will automatically return from function call as normal/trivial scenerios
+    expected.
 
 Download
 --------
