@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import shutil
 import subprocess
 
 import setuptools
 
-PS_PATH = shutil.which('ps')
-if PS_PATH is not None:
-    try:
-        subprocess.check_call([PS_PATH, 'axo', 'pid=,stat='],
-                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    except subprocess.CalledProcessError:
-        requirements = ['setuptools', 'psutil']
-    else:
-        requirements = ['setuptools']
+try:
+    subprocess.check_call(['ps', 'axo', 'pid=,stat='],
+                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+except subprocess.CalledProcessError:
+    requirements = ['setuptools', 'psutil']
 else:
     requirements = ['setuptools']
 
@@ -22,7 +17,7 @@ with open('./README.rst', 'r') as file:
     long_desc = file.read()
 
 # version string
-__version__ = '0.1.1'
+__version__ = '0.1.1.post1'
 
 # set-up script for pip distribution
 setuptools.setup(
