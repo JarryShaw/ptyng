@@ -1,5 +1,11 @@
 # Changelog
 
+### Version 0.1.2
+
+ > Release date: 2018-09-27
+
+&emsp; Added `timeout` argument to `ptyng.spawn`.
+
 ### Version 0.1.1.post3
 
  > Release date: 2018-09-26

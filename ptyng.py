@@ -6,11 +6,18 @@
 #       UNIX Environment.  Chapter 19.
 # Author: Steen Lumholt -- with additions by Guido.
 
-from select import select
+import contextlib
 import os
 import shutil
+import signal
 import subprocess
 import tty
+from select import select
+
+try:
+    import threading
+except ImportError:
+    import dummy_threading as threading
 
 try:
     import psutil
@@ -181,13 +188,20 @@ def _copy(pid, master_fd, master_read=_read, stdin_read=_read):
             else:
                 _writen(master_fd, data)
 
-def spawn(argv, master_read=_read, stdin_read=_read):
+def _kill(pid, signal):
+    """Kill a process with a signal."""
+    with contextlib.suppress(OSError):
+        os.kill(pid, signal)
+
+def spawn(argv, master_read=_read, stdin_read=_read, timeout=None):
     """Create a spawned process."""
     if type(argv) == type(''):
         argv = (argv,)
     pid, master_fd = fork()
     if pid == CHILD:
         os.execlp(argv[0], *argv)
+    if timeout is not None:
+        threading.Timer(timeout, _kill, args=(pid, signal.SIGKILL)).start()
     try:
         mode = tty.tcgetattr(STDIN_FILENO)
         tty.setraw(STDIN_FILENO)
