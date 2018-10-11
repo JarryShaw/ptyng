@@ -201,7 +201,8 @@ def spawn(argv, master_read=_read, stdin_read=_read, timeout=None):
     if pid == CHILD:
         os.execlp(argv[0], *argv)
     if timeout is not None:
-        threading.Timer(timeout, _kill, args=(pid, signal.SIGKILL)).start()
+        timer = threading.Timer(timeout, _kill, args=(pid, signal.SIGKILL))
+        timer.start()
     try:
         mode = tty.tcgetattr(STDIN_FILENO)
         tty.setraw(STDIN_FILENO)
@@ -216,4 +217,6 @@ def spawn(argv, master_read=_read, stdin_read=_read, timeout=None):
             tty.tcsetattr(STDIN_FILENO, tty.TCSAFLUSH, mode)
 
     os.close(master_fd)
+    if timeout is not None:
+        timer.cancel()
     return os.waitpid(pid, 0)[1]

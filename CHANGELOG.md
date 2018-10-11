@@ -1,5 +1,11 @@
 # Changelog
 
+### Version 0.1.3
+
+ > Release date: 2018-10-11
+
+&emsp; Fixed minor bugs with `timeout` when cancelled.
+
 ### Version 0.1.2
 
  > Release date: 2018-09-27
