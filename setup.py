@@ -22,7 +22,7 @@ with open('./README.rst', 'r') as file:
     long_desc = file.read()
 
 # version string
-__version__ = '0.1.3'
+__version__ = '0.2.0'
 
 # set-up script for pip distribution
 setuptools.setup(

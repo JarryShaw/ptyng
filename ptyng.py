@@ -155,7 +155,7 @@ if psutil is None:  # if psutil not installed
         for line in proc.splitlines():
             _pid, stat = line.strip().decode().split()
             if int(_pid) == pid:
-                return (stat == 'Z')
+                return ('Z' in stat)
         raise OSError(3, 'No such process')
 else:
     def _is_zombie(pid):

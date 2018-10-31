@@ -1,5 +1,11 @@
 # Changelog
 
+### Version 0.2.0
+
+ > Release date: 2018-10-31
+
+&emsp; Fixed minor bugs with `zombie` determination.
+
 ### Version 0.1.3
 
  > Release date: 2018-10-11
