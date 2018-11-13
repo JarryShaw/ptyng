@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import subprocess
-
-import setuptools
+import sys
 
 try:
-    import termios
+    import pty
 except ImportError:
+    print('Unsupported operating system!', file=sys.stderr)
     raise
+
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 try:
     subprocess.check_call(['ps', 'axo', 'pid=,stat='],
@@ -15,17 +20,17 @@ try:
 except subprocess.CalledProcessError:
     requirements = ['setuptools', 'psutil']
 else:
-    requirements = ['setuptools']
+    requirements = list()
 
 # README
 with open('./README.rst', 'r') as file:
     long_desc = file.read()
 
 # version string
-__version__ = '0.2.0'
+__version__ = '0.2.0.post1'
 
 # set-up script for pip distribution
-setuptools.setup(
+setup(
     name='ptyng',
     version=__version__,
     author='Jarry Shaw',
