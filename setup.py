@@ -27,7 +27,7 @@ with open('./README.rst', 'r') as file:
     long_desc = file.read()
 
 # version string
-__version__ = '0.2.0.post2'
+__version__ = '0.2.0.post3'
 
 # set-up script for pip distribution
 setup(
@@ -41,6 +41,7 @@ setup(
     long_description=long_desc,
     long_description_content_type='text/x-rst',
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
+    include_package_data=True,
     install_requires=requirements,
     py_modules=['ptyng'],
     package_data={
