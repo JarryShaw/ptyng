@@ -1,78 +1,84 @@
 # Changelog
 
-### Version 0.2.0.post3
+## Version 0.2.0.post4
+
+ > Release date: 2018-11-19
+
+&emsp; Updated distribution script.
+
+## Version 0.2.0.post3
 
  > Release date: 2018-11-15
 
 &emsp; There are no updates in version 0.2.0.post3.
 
-### Version 0.2.0.post2
+## Version 0.2.0.post2
 
  > Release date: 2018-11-15
 
 &emsp; There are no updates in version 0.2.0.post2.
 
-### Version 0.2.0.post1
+## Version 0.2.0.post1
 
  > Release date: 2018-11-13
 
 &emsp; There are no updates in version 0.2.0.post1.
 
-### Version 0.2.0
+## Version 0.2.0
 
  > Release date: 2018-10-31
 
 &emsp; Fixed minor bugs with `zombie` determination.
 
-### Version 0.1.3
+## Version 0.1.3
 
  > Release date: 2018-10-11
 
 &emsp; Fixed minor bugs with `timeout` when cancelled.
 
-### Version 0.1.2
+## Version 0.1.2
 
  > Release date: 2018-09-27
 
 &emsp; Added `timeout` argument to `ptyng.spawn`.
 
-### Version 0.1.1.post3
+## Version 0.1.1.post3
 
  > Release date: 2018-09-26
 
 &emsp; There are no updates in version 0.1.1.post3.
 
-### Version 0.1.1.post2
+## Version 0.1.1.post2
 
  > Release date: 2018-09-26
 
 &emsp; There are no updates in version 0.1.1.post2.
 
-### Version 0.1.1.post1
+## Version 0.1.1.post1
 
  > Release date: 2018-09-26
 
 &emsp; There are no updates in version 0.1.1.post1.
 
-### Version 0.1.1
+## Version 0.1.1
 
  > Release date: 2018-09-25
 
 &emsp; Introduced `psutil` for cross-platform compatibility.
 
-### Version 0.1.0.post2
+## Version 0.1.0.post2
 
  > Release date: 2018-09-24
 
 &emsp; There are no updates in version 0.1.0.post2.
 
-### Version 0.1.0.post1
+## Version 0.1.0.post1
 
  > Release date: 2018-09-24
 
 &emsp; There are no updates in version 0.1.0.post1.
 
-### Version 0.1.0
+## Version 0.1.0
 
  > Release date: 2018-09-24
 

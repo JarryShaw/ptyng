@@ -12,10 +12,12 @@ mv -f dist/*.egg eggs/ 2> /dev/null
 mv -f dist/*.whl wheels/ 2> /dev/null
 mv -f dist/*.tar.gz sdist/ 2> /dev/null
 
+# distribute to PyPI and TestPyPI
 python3 setup.py sdist bdist_wheel
+platform=$( python3 -c "import distutils.util; print(distutils.util.get_platform().replace('-', '_').replace('.', '_'))" )
 file=$( ls dist/*.tar.gz )
 name=${file%*.tar.gz*}
-mv dist/*.whl "${name}-py3-none-macosx_10_14_x86_64.whl"
+mv "${name}-py2.py3-none-any.whl" "${name}-py2.py3-none-${platform}.whl"
 twine upload dist/* -r pypi --skip-existing
 twine upload dist/* -r pypitest --skip-existing
 
