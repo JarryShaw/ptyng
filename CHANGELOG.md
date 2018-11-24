@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.2.1
+
+ > Release date: 2018-11-24
+
+&emsp; Added `env` argument to `spawn`.
+
 ## Version 0.2.0.post4
 
  > Release date: 2018-11-19

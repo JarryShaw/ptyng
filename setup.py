@@ -23,11 +23,11 @@ else:
     requirements = list()
 
 # README
-with open('./README.rst', 'r') as file:
+with open('README.rst', 'r') as file:
     long_desc = file.read()
 
 # version string
-__version__ = '0.2.0.post4'
+__version__ = '0.2.1'
 
 # set-up script for pip distribution
 setup(

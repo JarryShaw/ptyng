@@ -193,13 +193,15 @@ def _kill(pid, signal):
     with contextlib.suppress(OSError):
         os.kill(pid, signal)
 
-def spawn(argv, master_read=_read, stdin_read=_read, timeout=None):
+def spawn(argv, master_read=_read, stdin_read=_read, timeout=None, env=None):
     """Create a spawned process."""
     if type(argv) == type(''):
         argv = (argv,)
     pid, master_fd = fork()
+    if env is None:
+        env = os.environ
     if pid == CHILD:
-        os.execlp(argv[0], *argv)
+        os.execve(argv[0], argv, env)
     if timeout is not None:
         timer = threading.Timer(timeout, _kill, args=(pid, signal.SIGKILL))
         timer.start()

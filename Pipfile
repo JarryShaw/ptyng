@@ -4,11 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+psutil = "*"
 
 [dev-packages]
-psutil = "*"
-sphinx = "*"
-"doc8" = "*"
+ipython = "*"
+rope = "*"
+"autopep8" = "*"
+pylint = "*"
+pycodestyle = "*"
+isort = {extras = ["pipfile", "requirements"],version = "*"}
 
 [requires]
 python_version = "3.7"

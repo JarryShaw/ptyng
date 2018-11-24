@@ -12,12 +12,24 @@ mv -f dist/*.egg eggs/ 2> /dev/null
 mv -f dist/*.whl wheels/ 2> /dev/null
 mv -f dist/*.tar.gz sdist/ 2> /dev/null
 
-# distribute to PyPI and TestPyPI
+# fetch platform spec
 python3 setup.py sdist bdist_wheel
 platform=$( python3 -c "import distutils.util; print(distutils.util.get_platform().replace('-', '_').replace('.', '_'))" )
 file=$( ls dist/*.tar.gz )
 name=${file%*.tar.gz*}
-mv "${name}-py2.py3-none-any.whl" "${name}-py2.py3-none-${platform}.whl"
+
+# make distribution
+python3.7 setup.py bdist_egg bdist_wheel
+mv "${name}-py3-none-any.whl" "${name}-cp37-none-${platform}.whl"
+python3.6 setup.py bdist_egg bdist_wheel
+mv "${name}-py3-none-any.whl" "${name}-cp36-none-${platform}.whl"
+pypy3 setup.py bdist_wheel
+mv "${name}-py3-none-any.whl" "${name}-pp35-none-${platform}.whl"
+python3.4 setup.py bdist_egg
+python3.5 setup.py bdist_egg
+python3 setup.py sdist bdist_wheel
+
+# distribute to PyPI and TestPyPI
 twine upload dist/* -r pypi --skip-existing
 twine upload dist/* -r pypitest --skip-existing
 
