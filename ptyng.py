@@ -10,9 +10,13 @@ import contextlib
 import os
 import shutil
 import signal
-import subprocess
 import tty
 from select import select
+
+try:
+    import subprocess32 as subprocess
+except ImportError:
+    import subprocess
 
 try:
     import threading

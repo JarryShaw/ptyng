@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import subprocess
-import sys
+from __future__ import print_function
 
-try:
-    import pty
-except ImportError:
-    print('Unsupported operating system!', file=sys.stderr)
-    raise
+import sys
 
 try:
     from setuptools import setup
@@ -15,19 +10,31 @@ except ImportError:
     from distutils.core import setup
 
 try:
+    import subprocess32 as subprocess
+except ImportError:
+    import subprocess
+
+try:
+    import pty
+except ImportError:
+    print('Unsupported operating system!', file=sys.stderr)
+    raise
+
+# version string
+__version__ = '0.2.1.post1'
+
+# install requires
+try:
     subprocess.check_call(['ps', 'axo', 'pid=,stat='],
                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 except subprocess.CalledProcessError:
-    requirements = ['setuptools', 'psutil']
+    requirements = ['psutil']
 else:
-    requirements = list()
+    requirements = None
 
 # README
 with open('README.rst', 'r') as file:
     long_desc = file.read()
-
-# version string
-__version__ = '0.2.1'
 
 # set-up script for pip distribution
 setup(
@@ -43,6 +50,9 @@ setup(
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
     include_package_data=True,
     install_requires=requirements,
+    extras_require={
+        ':python_version <= "3.4"': ['subprocess32>=3.5.3'],
+    },
     py_modules=['ptyng'],
     package_data={
         '': [

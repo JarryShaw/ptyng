@@ -19,15 +19,19 @@ file=$( ls dist/*.tar.gz )
 name=${file%*.tar.gz*}
 
 # make distribution
-python3.7 setup.py bdist_egg bdist_wheel
+pipenv run python3.7 setup.py bdist_egg bdist_wheel
 mv "${name}-py3-none-any.whl" "${name}-cp37-none-${platform}.whl"
-python3.6 setup.py bdist_egg bdist_wheel
+pipenv run python3.6 setup.py bdist_egg bdist_wheel
 mv "${name}-py3-none-any.whl" "${name}-cp36-none-${platform}.whl"
-pypy3 setup.py bdist_wheel
+pipenv run pypy3 setup.py bdist_wheel
 mv "${name}-py3-none-any.whl" "${name}-pp35-none-${platform}.whl"
-python3.4 setup.py bdist_egg
-python3.5 setup.py bdist_egg
-python3 setup.py sdist bdist_wheel
+pipenv run python2.7 setup.py bdist_egg bdist_wheel
+mv "${name}-py2-none-any.whl" "${name}-cp27-none-${platform}.whl"
+pipenv run pypy setup.py bdist_egg bdist_wheel
+mv "${name}-py2-none-any.whl" "${name}-pp27-none-${platform}.whl"
+pipenv run python3.5 setup.py bdist_egg
+pipenv run python3.4 setup.py bdist_egg
+python3 setup.py sdist
 
 # distribute to PyPI and TestPyPI
 twine upload dist/* -r pypi --skip-existing
