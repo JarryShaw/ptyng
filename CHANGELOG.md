@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.2.1.post2
+
+ > Release date: 2018-11-28
+
+&emsp; Fixed distribution errors, and uploaded wheels for CPython 3.4/3.5.
+
 ## Version 0.2.1.post1
 
  > Release date: 2018-11-25

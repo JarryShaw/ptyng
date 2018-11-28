@@ -1,2 +1,5 @@
 exclude test.py
 exclude pty.py
+
+include README.rst
+include LICENSE
