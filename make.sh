@@ -60,7 +60,7 @@ if [[ $ret -ne "0" ]] ; then
 fi
 
 # update maintenance information
-maintainer changelog && \
+# maintainer changelog && \
 maintainer contributor && \
 maintainer contributing
 ret="$?"
