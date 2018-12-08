@@ -21,7 +21,7 @@ except ImportError:
     raise
 
 # version string
-__version__ = '0.3.0'
+__version__ = '0.3.0.post1'
 
 # install requires
 try:
@@ -43,7 +43,7 @@ setup(
     author='Jarry Shaw',
     author_email='jarryshaw@icloud.com',
     url='https://github.com/JarryShaw/ptyng',
-    license='MIT License',
+    license='Python Software Foundation License',
     description='Pseudo-terminal utilities.',
     long_description=long_desc,
     long_description_content_type='text/x-rst',
@@ -63,7 +63,7 @@ setup(
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: Python Software Foundation License',
         'Operating System :: Unix',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
