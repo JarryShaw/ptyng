@@ -21,7 +21,7 @@ except ImportError:
     raise
 
 # version string
-__version__ = '0.2.1.post2'
+__version__ = '0.3.0'
 
 # install requires
 try:
