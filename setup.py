@@ -21,7 +21,7 @@ except ImportError:
     raise
 
 # version string
-__version__ = '0.3.0.post1'
+__version__ = '0.3.0.post2'
 
 # install requires
 try:
@@ -33,8 +33,8 @@ else:
     requirements = None
 
 # README
-with open('README.rst', 'r') as file:
-    long_desc = file.read()
+with open('README.rst', 'rb') as file:
+    long_desc = file.read().decode('utf-8')
 
 # set-up script for pip distribution
 setup(
