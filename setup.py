@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 
+import os
 import sys
 
 try:
@@ -9,9 +10,9 @@ try:
 except ImportError:
     from distutils.core import setup
 
-try:
+if sys.version_info[:2] < (3, 4):
     import subprocess32 as subprocess
-except ImportError:
+else:
     import subprocess
 
 try:
@@ -21,11 +22,13 @@ except ImportError:
     raise
 
 # version string
-__version__ = '0.3.0.post2'
+__version__ = '0.3.1'
 
 # install requires
 try:
     subprocess.check_call(['ps', 'axo', 'pid=,stat='],
+                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.check_call(['pgrep', '-P', str(os.getpid())],
                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 except subprocess.CalledProcessError:
     requirements = ['psutil']
@@ -51,7 +54,10 @@ setup(
     include_package_data=True,
     install_requires=requirements,
     extras_require={
-        ':python_version <= "3.4"': ['subprocess32>=3.5.3'],
+        ':python_version <= "3.3"': [
+            'backports.shutil_which>=3.5.2',
+            'subprocess32>=3.5.3'
+        ],
     },
     py_modules=['ptyng'],
     package_data={

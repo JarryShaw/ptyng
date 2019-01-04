@@ -8,15 +8,10 @@
 
 import contextlib
 import os
-import shutil
 import signal
+import sys
 import tty
 from select import select
-
-try:
-    import subprocess32 as subprocess
-except ImportError:
-    import subprocess
 
 try:
     import threading
@@ -24,20 +19,32 @@ except ImportError:
     import dummy_threading as threading
 
 try:
+    from shutil import which
+except ImportError:
+    from backports.shutil_which import which
+
+if sys.version_info[:2] < (3, 4):
+    import subprocess32 as subprocess
+else:
+    import subprocess
+
+try:
     import psutil
     TIMEOUT = 1
 except ImportError:
     psutil = None
-    PS_PATH = shutil.which('ps')
+    PS_PATH = which('ps')
+    PGREP_PATH = which('pgrep')
     TIMEOUT = None if PS_PATH is None else 1
 
-__all__ = ["openpty","fork","spawn"]
+__all__ = ["openpty", "fork", "spawn"]
 
 STDIN_FILENO = 0
 STDOUT_FILENO = 1
 STDERR_FILENO = 2
 
 CHILD = 0
+
 
 def openpty():
     """openpty() -> (master_fd, slave_fd)
@@ -50,6 +57,7 @@ def openpty():
     master_fd, slave_name = _open_terminal()
     slave_fd = slave_open(slave_name)
     return master_fd, slave_fd
+
 
 def master_open():
     """master_open() -> (master_fd, slave_name)
@@ -67,6 +75,7 @@ def master_open():
 
     return _open_terminal()
 
+
 def _open_terminal():
     """Open pty master and return (master_fd, tty_name)."""
     for x in 'pqrstuvwxyzPQRST':
@@ -78,6 +87,7 @@ def _open_terminal():
                 continue
             return (fd, '/dev/tty' + x + y)
     raise OSError('out of pty devices')
+
 
 def slave_open(tty_name):
     """slave_open(tty_name) -> slave_fd
@@ -96,6 +106,7 @@ def slave_open(tty_name):
     except OSError:
         pass
     return result
+
 
 def fork():
     """fork() -> (pid, master_fd)
@@ -126,7 +137,7 @@ def fork():
         os.dup2(slave_fd, STDOUT_FILENO)
         os.dup2(slave_fd, STDERR_FILENO)
         if (slave_fd > STDERR_FILENO):
-            os.close (slave_fd)
+            os.close(slave_fd)
 
         # Explicitly open the tty to make it become a controlling tty.
         tmp_fd = os.open(os.ttyname(STDOUT_FILENO), os.O_RDWR)
@@ -137,15 +148,18 @@ def fork():
     # Parent and child process.
     return pid, master_fd
 
+
 def _writen(fd, data):
     """Write all the data to a descriptor."""
     while data:
         n = os.write(fd, data)
         data = data[n:]
 
+
 def _read(fd):
     """Default read function."""
     return os.read(fd, 1024)
+
 
 if psutil is None:  # if psutil not installed
     def _is_zombie(pid):
@@ -156,11 +170,25 @@ if psutil is None:  # if psutil not installed
             proc = subprocess.check_output([PS_PATH, 'axo', 'pid=,stat='])
         except subprocess.CalledProcessError:
             return False
-        for line in proc.splitlines():
+        for line in proc.strip().splitlines():
             _pid, stat = line.strip().decode().split()
             if int(_pid) == pid:
                 return ('Z' in stat)
         raise OSError(3, 'No such process')
+
+    def _fetch_child(ppid):
+        """Get child processes of a leading process."""
+        chld_pid = [ppid]
+        if PGREP_PATH is None:
+            return chld_pid
+        try:
+            proc = subprocess.check_output([PGREP_PATH, '-P', str(ppid)])
+        except subprocess.CalledProcessError:
+            return chld_pid
+        for line in proc.strip().splitlines():
+            with contextlib.suppress(ValueError):
+                chld_pid.extend(_fetch_child(int(line.strip())))
+        return chld_pid
 else:
     def _is_zombie(pid):
         """Check if pid is in zombie stat."""
@@ -169,6 +197,17 @@ else:
         except psutil.NoSuchProcess:
             raise OSError(3, 'No such process')
 
+    def _fetch_child(ppid):
+        """Get child processes of a leading process."""
+        chld_pid = [ppid]
+        try:
+            for child in psutil.Process(ppid).children(recursive=True):
+                chld_pid.append(child.pid)
+        except psutil.NoSuchProcess:
+            pass
+        return chld_pid
+
+
 def _copy(pid, master_fd, master_read=_read, stdin_read=_read):
     """Parent copy loop.
     Copies
@@ -176,7 +215,7 @@ def _copy(pid, master_fd, master_read=_read, stdin_read=_read):
             standard input -> pty master    (stdin_read)"""
     fds = [master_fd, STDIN_FILENO]
     while True:
-        rfds, wfds, xfds = select(fds, [], [], TIMEOUT)
+        rfds, _, _ = select(fds, [], [], TIMEOUT)
         if _is_zombie(pid):
             raise OSError(5, 'Input/output error')
         if master_fd in rfds:
@@ -192,29 +231,36 @@ def _copy(pid, master_fd, master_read=_read, stdin_read=_read):
             else:
                 _writen(master_fd, data)
 
+
 def _kill(pid, signal):
     """Kill a process with a signal."""
     with contextlib.suppress(OSError):
-        os.kill(pid, signal)
+        for chld in _fetch_child(pid):
+            os.kill(chld, signal)
+
 
 def spawn(argv, master_read=_read, stdin_read=_read, timeout=None, env=None):
     """Create a spawned process."""
-    if type(argv) == type(''):
-        argv = (argv,)
-    pid, master_fd = fork()
     if env is None:
         env = os.environ
+    if isinstance(argv, str):
+        argv = (argv,)
+
+    pid, master_fd = fork()
     if pid == CHILD:
-        os.execve(argv[0], argv, env)
+        os.execvpe(argv[0], argv, env)
+
     if timeout is not None:
         timer = threading.Timer(timeout, _kill, args=(pid, signal.SIGKILL))
         timer.start()
+
     try:
         mode = tty.tcgetattr(STDIN_FILENO)
         tty.setraw(STDIN_FILENO)
         restore = 1
     except tty.error:    # This is the same as termios.error
         restore = 0
+
     try:
         _copy(pid, master_fd, master_read, stdin_read)
         # print('copied!')

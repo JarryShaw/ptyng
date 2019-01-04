@@ -5,9 +5,10 @@ name = "pypi"
 
 [packages]
 psutil = "*"
+subprocess32 = ">=3.5.3"
+backports-shutil-which = ">=3.5.2"
 
 [dev-packages]
-subprocess32 = ">=3.5.3"
 ipython = "*"
 rope = "*"
 "autopep8" = "*"

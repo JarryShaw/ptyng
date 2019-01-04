@@ -33,5 +33,7 @@ Refer to the
 `standard pty <http://docs.python.org/dev/library/pty.html>`_
 documentation.
 
-    ``ptyng.spawn`` now supports ``timeout`` argument. If the timeout expires, the
-    spanwed child process will be killed and waited for.
+    ``ptyng.spawn`` now supports ``timeout`` argument. If the timeout
+    expires, the spawned child process will be killed and waited for.
+    Another ``env`` argument can be used to set the runtime environment
+    variables for the spawned child process, default is ``os.environ``.

@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.3.1
+
+ > Release date: 2019-01-04
+
+&emsp; Fixed bugs when killing spawned process.
+
 ## Version 0.3.0.post2
 
  > Release date: 2018-12-12
