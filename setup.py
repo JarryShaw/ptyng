@@ -22,14 +22,19 @@ except ImportError:
     raise
 
 # version string
-__version__ = '0.3.1'
+__version__ = '0.3.1.post1'
 
 # install requires
 try:
     subprocess.check_call(['ps', 'axo', 'pid=,stat='],
                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.check_call(['pgrep', '-P', str(os.getpid())],
-                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    with subprocess.Popen(['yes'], stdout=subprocess.PIPE,
+                          stderr=subprocess.DEVNULL) as pipe:
+        subprocess.check_call(['pgrep', '-P', str(os.getpid())],
+                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        pipe.terminate()
+        pipe.kill()
 except subprocess.CalledProcessError:
     requirements = ['psutil']
 else:

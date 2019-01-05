@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.3.1.post1
+
+ > Release date: 2019-01-05
+
+&emsp; Fixed bugs in `setup.py`.
+
 ## Version 0.3.1
 
  > Release date: 2019-01-04
