@@ -7,10 +7,12 @@
 # Author: Steen Lumholt -- with additions by Guido.
 
 import contextlib
+import io
 import os
 import signal
 import sys
 import tty
+import warnings
 from select import select
 
 try:
@@ -232,11 +234,20 @@ def _copy(pid, master_fd, master_read=_read, stdin_read=_read):
                 _writen(master_fd, data)
 
 
-def _kill(pid, signal):
+def _kill(pid, signal, master_read):
     """Kill a process with a signal."""
-    with contextlib.suppress(OSError):
-        for chld in _fetch_child(pid):
+    class FileObject(io.IOBase):
+        def write(self, data):
+            os.write(master_read, bytes(data, 'utf-8', 'replace'))
+
+    file = FileObject(master_read)
+    for chld in reversed(_fetch_child(pid)):
+        try:
             os.kill(chld, signal)
+        except OSError as error:
+            message = ('failed to send signal to process %d '
+                       'with error message: %s') % (chld, error)
+            warnings.showwarning(message, ResourceWarning, __file__, 246, file)
 
 
 def spawn(argv, master_read=_read, stdin_read=_read, timeout=None, env=None):
@@ -251,7 +262,7 @@ def spawn(argv, master_read=_read, stdin_read=_read, timeout=None, env=None):
         os.execvpe(argv[0], argv, env)
 
     if timeout is not None:
-        timer = threading.Timer(timeout, _kill, args=(pid, signal.SIGKILL))
+        timer = threading.Timer(timeout, _kill, args=(pid, signal.SIGKILL, master_fd))
         timer.start()
 
     try:

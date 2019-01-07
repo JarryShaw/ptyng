@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.3.2
+
+ > Release date: 2019-01-07
+
+&emsp; Kill child process (and its children) in a graceful way (to avoid orphan).
+
 ## Version 0.3.1.post1
 
  > Release date: 2019-01-05
