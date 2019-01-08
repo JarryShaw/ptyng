@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.3.3
+
+ > Release date: 2019-01-08
+
+&emsp; If attempt to kill child w/ `SIGKILL`failed, use `SIGTERM` instead.
+
 ## Version 0.3.2
 
  > Release date: 2019-01-07

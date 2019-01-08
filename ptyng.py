@@ -245,6 +245,8 @@ def _kill(pid, signal, master_read):
         try:
             os.kill(chld, signal)
         except OSError as error:
+            with contextlib.suppress(OSError):
+                os.kill(chld, signal.SIGTERM)
             message = ('failed to send signal to process %d '
                        'with error message: %s') % (chld, error)
             warnings.showwarning(message, ResourceWarning, __file__, 246, file)
