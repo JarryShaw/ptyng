@@ -1,0 +1,3 @@
+[submodule "vendor/procps"]
+	path = vendor/procps
+	url = https://gitlab.com/procps-ng/procps.git
