@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  ptyng:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: ["bash", "/ptyng/docker/docker.sh"]
+    container_name: ptyng
+    image: ptyng
+    volumes:
+      - ../dist:/ptyng/dist
