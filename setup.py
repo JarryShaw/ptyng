@@ -16,13 +16,12 @@ else:
     import subprocess
 
 try:
-    import pty
+    import pty  # pylint: disable=unused-import
 except ImportError:
-    print('Unsupported operating system!', file=sys.stderr)
-    raise
+    sys.exit('Unsupported operating system!')
 
 # version string
-__version__ = '0.3.3'
+__version__ = '0.3.3.post1'
 
 # install requires
 try:

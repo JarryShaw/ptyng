@@ -15,20 +15,17 @@ import tty
 import warnings
 from select import select
 
+if sys.version_info[:2] < (3, 4):
+    import subprocess32 as subprocess
+    from backports.shutil_which import which
+else:
+    import subprocess
+    from shutil import which
+
 try:
     import threading
 except ImportError:
     import dummy_threading as threading
-
-try:
-    from shutil import which
-except ImportError:
-    from backports.shutil_which import which
-
-if sys.version_info[:2] < (3, 4):
-    import subprocess32 as subprocess
-else:
-    import subprocess
 
 try:
     import psutil
@@ -138,7 +135,7 @@ def fork():
         os.dup2(slave_fd, STDIN_FILENO)
         os.dup2(slave_fd, STDOUT_FILENO)
         os.dup2(slave_fd, STDERR_FILENO)
-        if (slave_fd > STDERR_FILENO):
+        if slave_fd > STDERR_FILENO:
             os.close(slave_fd)
 
         # Explicitly open the tty to make it become a controlling tty.
@@ -175,7 +172,7 @@ if psutil is None:  # if psutil not installed
         for line in proc.strip().splitlines():
             _pid, stat = line.strip().decode().split()
             if int(_pid) == pid:
-                return ('Z' in stat)
+                return 'Z' in stat
         raise OSError(3, 'No such process')
 
     def _fetch_child(ppid):
@@ -195,7 +192,7 @@ else:
     def _is_zombie(pid):
         """Check if pid is in zombie stat."""
         try:
-            return (psutil.Process(pid).status() == psutil.STATUS_ZOMBIE)
+            return psutil.Process(pid).status() == psutil.STATUS_ZOMBIE
         except psutil.NoSuchProcess:
             raise OSError(3, 'No such process')
 
@@ -234,16 +231,16 @@ def _copy(pid, master_fd, master_read=_read, stdin_read=_read):
                 _writen(master_fd, data)
 
 
-def _kill(pid, signal, master_read):
+def _kill(pid, sig, master_read):
     """Kill a process with a signal."""
     class FileObject(io.IOBase):
-        def write(self, data):
+        def write(self, data):  # pylint: disable=no-self-use
             os.write(master_read, bytes(data, 'utf-8', 'replace'))
 
     file = FileObject(master_read)
     for chld in reversed(_fetch_child(pid)):
         try:
-            os.kill(chld, signal)
+            os.kill(chld, sig)
         except OSError as error:
             with contextlib.suppress(OSError):
                 os.kill(chld, signal.SIGTERM)

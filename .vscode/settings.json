@@ -1,5 +1,4 @@
 {
-    "python.pythonPath": "/Users/jarryshaw/.virtualenvs/ptyng-pFkoxdfX/bin/python",
     "cSpell.words": [
         "FILENO",
         "PQRST",
@@ -29,6 +28,6 @@
         "waitpid",
         "writen"
     ],
-    "restructuredtext.confPath": "",
-    "python.linting.pylintEnabled": true
+    "python.linting.pylintEnabled": true,
+    "python.pythonPath": "/Users/jarryshaw/.virtualenvs/ptyng-pFkoxdfX/bin/python"
 }
